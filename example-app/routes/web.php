@@ -41,3 +41,14 @@ Route::get('/order', function () {
 Route::get('/women', function () {
     return view('women');
 })->name('women');
+Route::get('/admin', function () {
+    return view('admin');
+})->name('admin');
+Route::get('/admin/category', function () {
+    return view('admin/category/category-list');
+})->name('category');
+
+Route::get('/admin/product', function () {
+    return view('admin/product/product-list');
+})->name('product');
+

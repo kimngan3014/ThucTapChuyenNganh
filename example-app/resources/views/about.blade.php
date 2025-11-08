@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layout/about')
 @section('body')
 		<div class="breadcrumbs">
 			<div class="container">
