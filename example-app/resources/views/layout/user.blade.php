@@ -47,7 +47,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-sm-7 col-md-9">
-                            <div id="colorlib-logo"><a href="index.html">Footwear</a></div>
+                            <div id="colorlib-logo"><a href="{{ route('home') }}">Footwear</a></div>
                         </div>
                         <div class="col-sm-5 col-md-3">
                             <form action="#" class="search-wrap">
@@ -66,7 +66,7 @@
                                 <li class="has-dropdown">
                                     <a href="{{ route('men') }}">Men</a>
                                     <ul class="dropdown">
-                                        <li><a href="{{ route('product') }}">Product Detail</a></li>
+                                        <li><a href="{{ route('product_sp') }}">Product Detail</a></li>
                                         <li><a href="{{ route('cart') }}">Shopping Cart</a></li>
                                         <li><a href="{{ route('checkout') }}">Checkout</a></li>
                                         <li><a href="{{ route('order') }}">Order Complete</a></li>
@@ -76,6 +76,7 @@
                                 <li><a href="{{ route('women') }}">Women</a></li>
                                 <li><a href="{{ route('about') }}">About</a></li>
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
+                                <li><a href="{{ route('text')}}">Text</a></li>
                                 <li class="cart"><a href="{{ route('cart') }}"><i class="icon-shopping-cart"></i>
                                         Cart
                                         [0]</a></li>

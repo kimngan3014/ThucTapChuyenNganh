@@ -2321,7 +2321,11 @@
 }
 .icon-search:before {
   content: "\ebfd";
+  background-color:yellow;
+  color: #ffffff;
+  background-color: transparent
 }
+
 .icon-zoom-in:before {
   content: "\ebfe";
 }

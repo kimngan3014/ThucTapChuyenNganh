@@ -1,4 +1,4 @@
-@extends('layout/add_to_wishlist')
+@extends('layout/user')
 @section('body')
 		<div class="breadcrumbs">
 			<div class="container">

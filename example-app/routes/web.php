@@ -1,14 +1,24 @@
 <?php
 
+use App\Http\Controllers\admin\CategoryController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\AdminController;
 
+
+/*
+|--------------------------------------------------------------------------
+| PHẦN 1: KHÁCH HÀNG (FRONT-END)
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('/product', function () {
-    return view('product');
-})->name('product');
+Route::get('/product_sp', function () {
+    return view('product_sp');
+})->name('product_sp');
 
 Route::get('/checkout', function () {
     return view('checkout');
@@ -26,6 +36,10 @@ Route::get('/cart', function () {
     return view('cart');
 })->name('cart');
 
+Route::get('/text', function () {
+    return view('text');
+})->name('text');
+
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
@@ -41,14 +55,33 @@ Route::get('/order', function () {
 Route::get('/women', function () {
     return view('women');
 })->name('women');
-Route::get('/admin', function () {
-    return view('admin');
-})->name('admin');
-Route::get('/admin/category', function () {
-    return view('admin/category/category-list');
-})->name('category');
 
-Route::get('/admin/product', function () {
-    return view('admin/product/product-list');
-})->name('product');
+
+/*
+|--------------------------------------------------------------------------
+| PHẦN 2: ADMIN (QUẢN TRỊ) - Phải đăng nhập mới vào được
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+// Route::get('/admin', function () {
+//     return view('admin');
+// })->name('admin');
+
+// Route::get('/admin/category/', function () {
+//     return view('admin/category/category-list');
+// })->name('admin.category');
+
+// Route::get('/admin/product', function () {
+//     return view('admin/product/product-list');
+// })->name('admin.product');
+
+Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+Route::resource('category', CategoryController::class);
+Route::resource('product', ProductController::class);
+});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
