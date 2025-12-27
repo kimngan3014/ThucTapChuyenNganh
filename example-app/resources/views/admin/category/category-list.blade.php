@@ -1,4 +1,4 @@
-@extends('layout/admin')
+@extends('layouts/admin')
 @section('body')
     <div class="card-footer small text mutter">
         <table class="table">
@@ -9,7 +9,7 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Description</th>
+                    <th scope="col">Status</th>
                     <th scope="col">Edit</th>
                     <th scope="col">Delete</th>
                 </tr>
@@ -20,7 +20,13 @@
                     <tr>
                         <th scope="row">{{ $item->id }}</th>
                         <td>{{ $item->name }}</td>
-                        <td>{{ $item->description }}</td>
+                        <td class="text-center">
+                            @if ($item->status == 1)
+                                <i class="fas fa-check-circle text-success" style="font-size: 1.2rem;"></i>
+                            @else
+                                <i class="fas fa-times-circle text-danger" style="font-size: 1.2rem;"></i>
+                            @endif
+                        </td>
                         
                         <td>
                             <a href="{{route('admin.category.edit', $item->id)}}">

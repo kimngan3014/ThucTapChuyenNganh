@@ -7854,7 +7854,7 @@ h1, h2, h3, h4, h5,
   -moz-border-radius: 4px;
   -ms-border-radius: 4px;
   border-radius: 4px;
-  display: table; }
+   }
   .product-detail-wrap .btn i {
     display: table-cell;
     vertical-align: middle;
@@ -8848,3 +8848,98 @@ input[type="text"] {
 .Can_Giua_Khung{
   text-align: center;
 }
+/* CSS TÙY CHỈNH CHO TRANG GIỎ HÀNG */
+    /* 1. Làm đẹp khung "Tổng đơn hàng" bên phải */
+    .cart-detail {
+        background: #ffffff; /* Nền trắng */
+        border: 1px solid #e1e1e1; /* Viền mỏng sang trọng */
+        border-radius: 8px; /* Bo góc mềm mại */
+        padding: 25px !important; /* Khoảng cách bên trong thoáng hơn */
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Đổ bóng nhẹ tạo chiều sâu */
+        margin-bottom: 20px;
+    }
+
+    .cart-detail h2 {
+        font-size: 20px;
+        font-weight: 700;
+        border-bottom: 2px solid #eeeeee;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        color: #333;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .cart-detail ul li {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 15px;
+        color: #555;
+    }
+
+    .cart-detail ul li span strong {
+        color: #000;
+        font-size: 18px; /* Tổng tiền to hơn chút */
+    }
+
+    /* 2. Làm đẹp các ô nhập liệu (Input) */
+    .form-control {
+        height: 45px !important; /* Cao hơn cho dễ bấm */
+        border-radius: 5px;
+        border: 1px solid #ddd !important;
+        background-color: #fafafa !important; /* Màu nền xám cực nhẹ */
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus {
+        border-color: #28a745 !important; /* Khi bấm vào viền đổi màu xanh lá */
+        background-color: #fff !important;
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 13px;
+        color: #444;
+        margin-bottom: 5px;
+    }
+
+    /* 3. Nút Đặt Hàng xịn xò */
+    .btn-primary.btn-block {
+        background-color: #28a745 !important; /* Màu xanh uy tín */
+        border: none !important;
+        height: 50px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(40, 167, 69, 0.3);
+        transition: transform 0.2s;
+    }
+
+    .btn-primary.btn-block:hover {
+        background-color: #218838 !important;
+        transform: translateY(-2px); /* Hiệu ứng nổi lên khi di chuột */
+    }
+
+    /* 4. Chỉnh lại phần chọn phương thức thanh toán */
+    .radio label {
+        font-size: 15px;
+        color: #333;
+        cursor: pointer;
+        padding-left: 5px;
+    }
+    .radio input[type="radio"] {
+        transform: scale(1.2); /* Nút tròn to hơn xíu */
+        margin-right: 8px;
+    }
+
+/* CSS để làm nổi bật size khi được chọn */
+        .block-26 ul li a.active {
+        background: #616161; /* Màu nền khi chọn */
+        color: #fff;        /* Màu chữ khi chọn */
+        border-color: #616161;
+    }

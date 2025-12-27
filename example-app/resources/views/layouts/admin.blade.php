@@ -109,10 +109,6 @@
                     <i class="fas fa-fw fa-list"></i>
                     <span>Category</span>
                  </a>
-                {{-- <a class="nav-link" href="{{ route('category.index') }}">
-                    <i class="fas fa-fw fa-list"></i>
-                    <span>Category</span>
-                </a> --}}
             </li>
 
             
@@ -120,6 +116,13 @@
                 <a class="nav-link" href="{{ route('admin.product.index') }}">
                     <i class="fas fa-fw fa-box-open"></i>
                     <span>Product</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.settings.index') }}">
+                    <i class="fas fa-fw fa-cogs"></i>
+                    <span>Settings</span>
                 </a>
             </li>
 

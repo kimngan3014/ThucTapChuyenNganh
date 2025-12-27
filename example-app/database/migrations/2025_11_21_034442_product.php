@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table): void {
         $table->id();
+        $table->unsignedBigInteger('category_id')->nullable();
+        $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');  
         $table->string('name'); // Tên danh mục
+        $table->string('image')->nullable();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
         $table->decimal('price', 10, 2)->default(0);
-        $table->text('description')->nullable(); // Mô tả
+        $table->text('description')->nullable();
+        $table->boolean('status')->default(1); // Trạng thái
         $table->timestamps();
         });
     }

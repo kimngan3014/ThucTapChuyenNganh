@@ -1,195 +1,171 @@
-@extends('layout/user')
+@extends('layouts.user')
+
 @section('body')
-		<div class="breadcrumbs">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<p class="bread"><span><a href="index.html">Home</a></span> / <span>Checkout</span></p>
-					</div>
-				</div>
-			</div>
-		</div>
+    {{-- 1. XỬ LÝ LOGIC: CHỌN GIỎ HÀNG NÀO ĐỂ HIỂN THỊ --}}
+    @php
+        // Nếu có session 'buy_now_cart' (khách vừa bấm Mua Ngay) -> Lấy giỏ đó
+        if (session()->has('buy_now_cart')) {
+            $cart = session('buy_now_cart');
+        } 
+        // Ngược lại -> Lấy giỏ hàng thường
+        else {
+            $cart = session('cart', []);
+        }
 
+        // Tính lại tổng tiền dựa trên giỏ hàng đã chọn
+        $total = 0;
+        foreach($cart as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+    @endphp
+    {{-- KẾT THÚC LOGIC --}}
 
-		<div class="colorlib-product">
-			<div class="container">
-				<div class="row row-pb-lg">
-					<div class="col-sm-10 offset-md-1">
-						<div class="process-wrap">
-							<div class="process text-center active">
-								<p><span>01</span></p>
-								<h3>Shopping Cart</h3>
-							</div>
-							<div class="process text-center active">
-								<p><span>02</span></p>
-								<h3>Checkout</h3>
-							</div>
-							<div class="process text-center">
-								<p><span>03</span></p>
-								<h3>Order Complete</h3>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-lg-8">
-						<form method="post" class="colorlib-form">
-							<h2>Billing Details</h2>
-		              	<div class="row">
-			               <div class="col-md-12">
-			                  <div class="form-group">
-			                  	<label for="country">Select Country</label>
-			                     <div class="form-field">
-			                     	<i class="icon icon-arrow-down3"></i>
-			                        <select name="people" id="people" class="form-control">
-				                      	<option value="#">Select country</option>
-				                        <option value="#">Alaska</option>
-				                        <option value="#">China</option>
-				                        <option value="#">Japan</option>
-				                        <option value="#">Korea</option>
-				                        <option value="#">Philippines</option>
-			                        </select>
-			                     </div>
-			                  </div>
-			               </div>
+    <div class="breadcrumbs">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p class="bread"><span><a href="/">Home</a></span> / <span>Checkout</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="fname">First Name</label>
-										<input type="text" id="fname" class="form-control" placeholder="Your firstname">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="lname">Last Name</label>
-										<input type="text" id="lname" class="form-control" placeholder="Your lastname">
-									</div>
-								</div>
+    <div class="colorlib-product">
+        <div class="container">
+            <div class="row row-pb-lg">
+                <div class="col-sm-10 offset-md-1">
+                    <div class="process-wrap">
+                        <div class="process text-center active">
+                            <p><span>01</span></p>
+                            <h3>Shopping Cart</h3>
+                        </div>
+                        <div class="process text-center active">
+                            <p><span>02</span></p>
+                            <h3>Checkout</h3>
+                        </div>
+                        <div class="process text-center">
+                            <p><span>03</span></p>
+                            <h3>Order Complete</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-								<div class="col-md-12">
-									<div class="form-group">
-										<label for="companyname">Company Name</label>
-			                    	<input type="text" id="companyname" class="form-control" placeholder="Company Name">
-			                  </div>
-			               </div>
+            <form method="post" action="{{ route('cart.placeOrder') }}" class="colorlib-form">
+                @csrf
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h2>Thông tin giao hàng</h2>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="fname">Họ & Tên đệm</label>
+                                    <input type="text" name="first_name" class="form-control" placeholder="Nhập họ..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lname">Tên</label>
+                                    <input type="text" name="last_name" class="form-control" placeholder="Nhập tên..." required>
+                                </div>
+                            </div>
 
-			               <div class="col-md-12">
-									<div class="form-group">
-										<label for="fname">Address</label>
-			                    	<input type="text" id="address" class="form-control" placeholder="Enter Your Address">
-			                  </div>
-			                  <div class="form-group">
-			                    	<input type="text" id="address2" class="form-control" placeholder="Second Address">
-			                  </div>
-			               </div>
-			            
-			               <div class="col-md-12">
-									<div class="form-group">
-										<label for="companyname">Town/City</label>
-			                    	<input type="text" id="towncity" class="form-control" placeholder="Town or City">
-			                  </div>
-			               </div>
-			            
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="stateprovince">State/Province</label>
-										<input type="text" id="fname" class="form-control" placeholder="State Province">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="lname">Zip/Postal Code</label>
-										<input type="text" id="zippostalcode" class="form-control" placeholder="Zip / Postal">
-									</div>
-								</div>
-							
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="email">E-mail Address</label>
-										<input type="text" id="email" class="form-control" placeholder="State Province">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="Phone">Phone Number</label>
-										<input type="text" id="zippostalcode" class="form-control" placeholder="">
-									</div>
-								</div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="address">Địa chỉ nhận hàng</label>
+                                    <input type="text" name="address" class="form-control" placeholder="Số nhà, tên đường, phường/xã..." required>
+                                </div>
+                            </div>
 
-								<div class="col-md-12">
-									<div class="form-group">
-										<div class="radio">
-										  <label><input type="radio" name="optradio"> Create an Account? </label>
-										  <label><input type="radio" name="optradio"> Ship to different address</label>
-										</div>
-									</div>
-								</div>
-		               </div>
-		            </form>
-					</div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="towncity">Tỉnh / Thành phố</label>
+                                    <input type="text" name="city" class="form-control" placeholder="Nhập tỉnh/thành phố..." required>
+                                </div>
+                            </div>
 
-					<div class="col-lg-4">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="cart-detail">
-									<h2>Cart Total</h2>
-									<ul>
-										<li>
-											<span>Subtotal</span> <span>$100.00</span>
-											<ul>
-												<li><span>1 x Product Name</span> <span>$99.00</span></li>
-												<li><span>1 x Product Name</span> <span>$78.00</span></li>
-											</ul>
-										</li>
-										<li><span>Shipping</span> <span>$0.00</span></li>
-										<li><span>Order Total</span> <span>$180.00</span></li>
-									</ul>
-								</div>
-						   </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone">Số điện thoại</label>
+                                    <input type="text" name="phone" class="form-control" placeholder="Ví dụ: 0912345678" required>
+                                </div>
+                            </div>
 
-						   <div class="w-100"></div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Địa chỉ Email</label>
+                                    <input type="email" name="email" class="form-control" placeholder="Để nhận thông báo đơn hàng" required>
+                                </div>
+                            </div>
 
-						   <div class="col-md-12">
-								<div class="cart-detail">
-									<h2>Payment Method</h2>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio"> Direct Bank Tranfer</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio"> Check Payment</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="radio">
-											   <label><input type="radio" name="optradio"> Paypal</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="checkbox">
-											   <label><input type="checkbox" value=""> I have read and accept the terms and conditions</label>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12 text-center">
-								<p><a href="#" class="btn btn-primary">Place an order</a></p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="notes">Ghi chú đơn hàng</label>
+                                    <textarea name="notes" id="notes" cols="30" rows="5" class="form-control" placeholder="Ghi chú thêm về đơn hàng..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="cart-detail">
+                            <h2>Đơn hàng của bạn</h2>
+                            <ul>
+                                <li>
+                                    <span>Sản phẩm</span>
+                                    <span>Thành tiền</span>
+                                </li>
+
+                                {{-- 2. HIỂN THỊ SẢN PHẨM TỪ BIẾN $cart ĐÃ XỬ LÝ Ở TRÊN --}}
+                                @if($cart)
+                                    @foreach($cart as $details)
+                                        @php 
+                                            $subtotal = $details['price'] * $details['quantity'];
+                                        @endphp
+                                        <li>
+                                            <span>
+                                                {{ $details['quantity'] }} x {{ $details['name'] }} <br>
+                                                <small>(Size: {{ $details['size'] }})</small>
+                                            </span>
+                                            <span>{{ number_format($subtotal) }} ₫</span>
+                                        </li>
+                                    @endforeach
+                                @endif
+
+                                <li>
+                                    <span><strong>Tổng cộng</strong></span>
+                                    <span><strong>{{ number_format($total) }} VNĐ</strong></span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="cart-detail">
+                            <h2>Phương thức thanh toán</h2>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label><input type="radio" name="payment_method" value="COD" checked> Thanh toán khi nhận hàng (COD)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label><input type="radio" name="payment_method" value="BANK"> Chuyển khoản ngân hàng</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-primary btn-block">Đặt hàng ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection

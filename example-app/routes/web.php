@@ -1,87 +1,77 @@
 <?php
 
-use App\Http\Controllers\admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+// Khai báo các Controller sẽ dùng
+use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\AdminController;
-
+use App\Http\Controllers\ProductFrontendController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\admin\SettingController;
 
 /*
 |--------------------------------------------------------------------------
 | PHẦN 1: KHÁCH HÀNG (FRONT-END)
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('index');
-})->name('home');
 
-Route::get('/product_sp', function () {
-    return view('product_sp');
-})->name('product_sp');
+// Trang chủ
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/checkout', function () {
-    return view('checkout');
-})->name('checkout');
+// --- CÁC ROUTE TĨNH (About, Contact, Cart...) ---
+Route::get('/about', function () { return view('about'); })->name('about');
+Route::get('/contact', function () { return view('contact'); })->name('contact');
+Route::get('/checkout', function () { return view('checkout'); })->name('checkout');
+Route::get('/order', function () { return view('order'); })->name('order');
+Route::get('/add_to_wishlist', function () { return view('add_to_wishlist'); })->name('add_to_wishlist');
+Route::get('/wishlist', function () { return view('wishlist'); })->name('wishlist');
+Route::get('/category_user', function () { return view('category_user'); })->name('category_user');
 
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+// --- ROUTE GIỎ HÀNG ---
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+Route::get('/remove-from-cart', [CartController::class, 'removeCart'])->name('cart.remove');
+Route::patch('/update-cart', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('/buy-now', [CartController::class, 'buyNow'])->name('cart.buyNow');
+Route::post('/place-order', [CartController::class, 'placeOrder'])->name('cart.placeOrder');
 
-Route::get('/add_to_wishlist', function () {
-    return view('add_to_wishlist');
-})->name('add_to_wishlist');
+// --- QUAN TRỌNG: ROUTE XEM DANH MỤC (MEN/WOMEN) ---
+// Đây là dòng giúp link http://.../category/1 hoạt động
+Route::get('/category/{id}', [HomeController::class, 'viewCategory'])->name('category.view');
 
-Route::get('/cart', function () {
-    return view('cart');
-})->name('cart');
+// --- ROUTE SẢN PHẨM ---
+// Danh sách sản phẩm chung
+Route::get('/products', [HomeController::class, 'listProducts'])->name('products.list');
+// Chi tiết sản phẩm
+Route::get('/product/{id}', [ProductFrontendController::class, 'show'])->name('product.detail');
 
-Route::get('/text', function () {
-    return view('text');
-})->name('text');
+// --- ROUTE GỬI LIÊN HỆ ---
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
+// --- ROUTE TRA CỨU ĐƠN HÀNG ---
+Route::match(['get', 'post'], '/order-tracking', [HomeController::class, 'tracking'])->name('order.tracking');
 
-Route::get('/men', function () {
-    return view('men');
-})->name('men');
-
-Route::get('/order', function () {
-    return view('order');
-})->name('order');
-
-Route::get('/women', function () {
-    return view('women');
-})->name('women');
-
+// --- ROUTE TÌM KIẾM SẢN PHẨM ---
+Route::get('/search', [HomeController::class, 'search'])->name('product.search');
 
 /*
 |--------------------------------------------------------------------------
-| PHẦN 2: ADMIN (QUẢN TRỊ) - Phải đăng nhập mới vào được
+| PHẦN 2: ADMIN (QUẢN TRỊ)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-// Route::get('/admin', function () {
-//     return view('admin');
-// })->name('admin');
-
-// Route::get('/admin/category/', function () {
-//     return view('admin/category/category-list');
-// })->name('admin.category');
-
-// Route::get('/admin/product', function () {
-//     return view('admin/product/product-list');
-// })->name('admin.product');
-
-Route::get('/', [AdminController::class, 'index'])->name('dashboard');
-Route::resource('category', CategoryController::class);
-Route::resource('product', ProductController::class);
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    Route::resource('category', CategoryController::class);
+    Route::resource('product', ProductController::class);
+    // Route cấu hình chung (settings)
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
 });
 
+// Các route xác thực (Login/Register)
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
+// Route mặc định của Laravel sau khi login (có thể giữ hoặc bỏ)
+Route::get('/home', [HomeController::class, 'index'])->name('home_logged_in');  

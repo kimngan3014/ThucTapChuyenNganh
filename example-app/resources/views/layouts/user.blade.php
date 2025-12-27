@@ -50,11 +50,12 @@
                             <div id="colorlib-logo"><a href="{{ route('home') }}">Footwear</a></div>
                         </div>
                         <div class="col-sm-5 col-md-3">
-                            <form action="#" class="search-wrap">
+                            {{-- SỬA: Đổi route thành 'search' và thêm method="GET" --}}
+                            <form action="{{ route('product.search') }}" method="GET" class="search-wrap">
                                 <div class="form-group">
-                                    <input type="search" class="form-control search" placeholder="Search">
-                                    <button class="btn btn-primary submit-search text-center" type="submit"><i
-                                            class="icon-search"></i></button>
+                                    {{-- SỬA QUAN TRỌNG: Thêm name="keyword" để gửi dữ liệu đi --}}
+                                    <input type="search" name="keyword" class="form-control search" placeholder="Tìm kiếm sản phẩm..." value="{{ request('keyword') }}">
+                                    <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
                                 </div>
                             </form>
                         </div>
@@ -64,22 +65,47 @@
                             <ul>
                                 <li class="active"><a href="{{ route('home') }}">Home</a></li>
                                 <li class="has-dropdown">
-                                    <a href="{{ route('men') }}">Men</a>
+                                    <a href="{{ route('category_user') }}">All Categories</a>
+                                
+                                {{-- Thẻ UL này tạo ra cái bảng thả xuống --}}
                                     <ul class="dropdown">
-                                        <li><a href="{{ route('product_sp') }}">Product Detail</a></li>
-                                        <li><a href="{{ route('cart') }}">Shopping Cart</a></li>
-                                        <li><a href="{{ route('checkout') }}">Checkout</a></li>
-                                        <li><a href="{{ route('order') }}">Order Complete</a></li>
-                                        <li><a href="{{ route('add_to_wishlist') }}">Wishlist</a></li>
+                                    
+                                    {{-- Bắt đầu vòng lặp: Chỉ lặp các dòng con bên trong thôi --}}
+                                    @foreach($categories as $cat)
+                                        <li>
+                                            <a href="{{ url('/category/' . $cat->id) }}">
+                                                {{ $cat->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                    {{-- Kết thúc vòng lặp --}}
+                                    
                                     </ul>
                                 </li>
-                                <li><a href="{{ route('women') }}">Women</a></li>
                                 <li><a href="{{ route('about') }}">About</a></li>
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
-                                <li><a href="{{ route('text')}}">Text</a></li>
-                                <li class="cart"><a href="{{ route('cart') }}"><i class="icon-shopping-cart"></i>
-                                        Cart
-                                        [0]</a></li>
+                                {{-- Bắt đầu mục menu cha (Giữ nguyên class này để nó biết là menu thả xuống) --}}
+                                <li class="{{ Request::routeIs('order.tracking') ? 'active' : '' }}">
+                                    <a href="{{ route('order.tracking') }}">Tracking</a>
+                                </li>
+                                <li class="cart">
+                                    <a href="{{ route('cart.show') }}">
+                                        <i class="icon-shopping-cart"></i> Cart 
+                                        
+                                        {{-- Code PHP đếm tổng số lượng sản phẩm --}}
+                                        @php
+                                            $totalQuantity = 0;
+                                            if(session('cart')) {
+                                                foreach(session('cart') as $item) {
+                                                    $totalQuantity += $item['quantity'];
+                                                }
+                                            }
+                                        @endphp
+    
+                                        {{-- Hiển thị số lượng --}}
+                                        [{{ $totalQuantity }}]
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -123,10 +149,17 @@
                             unorthographic life</p>
                         <p>
                         <ul class="colorlib-social-icons">
-                            <li><a href="#"><i class="icon-twitter"></i></a></li>
-                            <li><a href="#"><i class="icon-facebook"></i></a></li>
-                            <li><a href="#"><i class="icon-linkedin"></i></a></li>
-                            <li><a href="#"><i class="icon-dribbble"></i></a></li>
+                            @if(!empty($globalSettings['social_facebook']))
+                                <li><a href="{{ $globalSettings['social_facebook'] }}"><i class="icon-facebook"></i></a></li>
+                            @endif
+                            
+                            @if(!empty($globalSettings['social_twitter']))
+                                <li><a href="{{ $globalSettings['social_twitter'] }}"><i class="icon-twitter"></i></a></li>
+                            @endif
+                            
+                            @if(!empty($globalSettings['social_instagram']))
+                                <li><a href="{{ $globalSettings['social_instagram'] }}"><i class="icon-instagram"></i></a></li>
+                            @endif
                         </ul>
                         </p>
                     </div>
@@ -169,10 +202,25 @@
                     <div class="col footer-col">
                         <h4>Contact Information</h4>
                         <ul class="colorlib-footer-links">
-                            <li>291 South 21th Street, <br> Suite 721 New York NY 10016</li>
-                            <li><a href="tel://1234567920">+ 1235 2355 98</a></li>
-                            <li><a href="mailto:info@yoursite.com">info@yoursite.com</a></li>
-                            <li><a href="#">yoursite.com</a></li>
+                            <li>
+                                {{ $globalSettings['shop_address'] ?? 'Địa chỉ shop chưa cập nhật' }}
+                            </li>
+
+                            <li>
+                                <a href="tel://{{ $globalSettings['shop_phone'] ?? '' }}">
+                                    {{ $globalSettings['shop_phone'] ?? '+ 84 ...' }}
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="mailto:{{ $globalSettings['shop_email'] ?? '' }}">
+                                    {{ $globalSettings['shop_email'] ?? 'admin@shopgiay.com' }}
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#">{{ $globalSettings['shop_website'] ?? 'shopgiay.com' }}</a>
+                            </li>
                         </ul>
                     </div>
                 </div>

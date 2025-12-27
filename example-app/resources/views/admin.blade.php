@@ -1,4 +1,4 @@
-@extends('layout/admin')
+@extends('layouts/admin')
 @section('body')
 <!-- Begin Page Content -->
                 <div class="container-fluid">

@@ -1,4 +1,4 @@
-@extends('layout/admin')
+@extends('layouts/admin')
 @section('body')
 <div class="container-fluid mt-5">
 
@@ -15,15 +15,17 @@
                     <label for="name" class="form-label font-weight-bold">Category Name</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="Enter category name..." required>
                 </div>
-                
-                <div class="mb-4">
-                    <label for="description" class="form-label font-weight-bold">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter a short description..."></textarea>
+               <div class="mb-3">
+                    <label for="status" class="form-label font-weight-bold">Status</label>
+                    <select class="form-control" id="status" name="status">
+                        <option value="1">ON</option>
+                        <option value="0">OFF</option>
+                    </select>
                 </div>
-                
+
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary px-4">Save</button>
-                    <a href="{{ route('admin.category.index') }}" class="btn btn-secondary px-4">Cancel</a>
+                    <a href="{{ route('admin.category.index') }}" class="btn btn-secondary px-4">Back</a>
                 </div>
 
             </form>
